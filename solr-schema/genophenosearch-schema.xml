@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<schema name="golr" version="6.2">
+  <types>
+    <!--Unsplit string for when text needs to be dealt with atomically.-->
+    <!--For example, faceted querying.-->
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true"></fieldType>
+    <!--Any string with spaces that needs to be treated for searching purposes.-->
+    <!--This will be automatically used in cases where "searchable: true" has been-->
+    <!--specified in the YAML.-->
+    <fieldType name="text_eng" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
+      <analyzer type="index">
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="_" replacement=" "></charFilter>
+        <tokenizer class="solr.StandardTokenizerFactory"></tokenizer>
+        <filter class="solr.LowerCaseFilterFactory"></filter>
+        <filter class="solr.EdgeNGramFilterFactory" minGramSize="3" maxGramSize="15"></filter>
+      </analyzer>
+      <analyzer type="query">
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="_" replacement=" "></charFilter>
+        <tokenizer class="solr.StandardTokenizerFactory"></tokenizer>
+        <filter class="solr.LowerCaseFilterFactory"></filter>
+      </analyzer>
+    </fieldType>
+    <fieldType name="text_std" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
+      <analyzer type="index">
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="_" replacement=" "></charFilter>
+        <tokenizer class="solr.StandardTokenizerFactory"></tokenizer>
+        <filter class="solr.LowerCaseFilterFactory"></filter>
+      </analyzer>
+      <analyzer type="query">
+        <charFilter class="solr.PatternReplaceCharFilterFactory" pattern="_" replacement=" "></charFilter>
+        <tokenizer class="solr.StandardTokenizerFactory"></tokenizer>
+        <filter class="solr.LowerCaseFilterFactory"></filter>
+      </analyzer>
+    </fieldType>
+    <fieldType name="text_kw" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
+      <analyzer type="index">
+        <tokenizer class="solr.KeywordTokenizerFactory"></tokenizer>
+        <filter class="solr.LowerCaseFilterFactory"></filter>
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.KeywordTokenizerFactory"></tokenizer>
+        <filter class="solr.LowerCaseFilterFactory"></filter>
+      </analyzer>
+    </fieldType>
+    <fieldType name="integer" class="solr.TrieIntField" precisionStep="0" positionIncrementGap="0" sortMissingLast="true"></fieldType>
+    <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"></fieldType>
+    <fieldType name="booleans" class="solr.BoolField" sortMissingLast="true" multiValued="true"></fieldType>
+    <fieldType name="long" class="solr.TrieLongField"></fieldType>
+    <fieldType name="tdates" class="solr.TrieDateField" positionIncrementGap="0" docValues="true" multiValued="true" precisionStep="6"></fieldType>
+    <fieldType name="tlongs" class="solr.TrieLongField" positionIncrementGap="0" docValues="true" multiValued="true" precisionStep="8"></fieldType>
+    <fieldType name="tdoubles" class="solr.TrieDoubleField" positionIncrementGap="0" docValues="true" multiValued="true" precisionStep="8"></fieldType>
+  </types>
+  <fields>
+    <!-- A special static/fixed (by YAML conf file) field all documents have. -->
+    <field name="document_category" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- Required by Solr. -->
+    <field name="_version_" type="long" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: A unique identifier for the annotation. -->
+    <field name="id" type="string" required="true" multiValued="false" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of id.-->
+    <field name="id_std" type="text_std" required="true" multiValued="false" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of id.-->
+    <field name="id_eng" type="text_eng" required="true" multiValued="false" indexed="true" stored="true"></field>
+    <!--A Keyword version of id.-->
+    <field name="id_kw" type="text_kw" required="true" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="id" dest="id_std"></copyField>
+    <copyField source="id" dest="id_eng"></copyField>
+    <copyField source="id" dest="id_kw"></copyField>
+    <!-- annotation: Study Accession -->
+    <field name="study_accession" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of study_accession.-->
+    <field name="study_accession_std" type="text_std" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of study_accession.-->
+    <field name="study_accession_eng" type="text_eng" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A Keyword version of study_accession.-->
+    <field name="study_accession_kw" type="text_kw" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="study_accession" dest="study_accession_std"></copyField>
+    <copyField source="study_accession" dest="study_accession_eng"></copyField>
+    <copyField source="study_accession" dest="study_accession_kw"></copyField>
+    <!-- annotation: Study Variable -->
+    <field name="variable_phv" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: tag ID -->
+    <field name="tag_id" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Study URL -->
+    <field name="study_url" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Study Dataset URL -->
+    <field name="study_dataset_url" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!-- annotation: Ontology class -->
+    <field name="ontology_class" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of ontology_class.-->
+    <field name="ontology_class_std" type="text_std" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of ontology_class.-->
+    <field name="ontology_class_eng" type="text_eng" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A Keyword version of ontology_class.-->
+    <field name="ontology_class_kw" type="text_kw" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="ontology_class" dest="ontology_class_std"></copyField>
+    <copyField source="ontology_class" dest="ontology_class_eng"></copyField>
+    <copyField source="ontology_class" dest="ontology_class_kw"></copyField>
+    <!-- annotation: Ontology class label -->
+    <field name="ontology_class_label" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of ontology_class_label.-->
+    <field name="ontology_class_label_std" type="text_std" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of ontology_class_label.-->
+    <field name="ontology_class_label_eng" type="text_eng" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A Keyword version of ontology_class_label.-->
+    <field name="ontology_class_label_kw" type="text_kw" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="ontology_class_label" dest="ontology_class_label_std"></copyField>
+    <copyField source="ontology_class_label" dest="ontology_class_label_eng"></copyField>
+    <copyField source="ontology_class_label" dest="ontology_class_label_kw"></copyField>
+    <!-- annotation: Ancestral terms (is_a) -->
+    <field name="isa_closure" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of isa_closure.-->
+    <field name="isa_closure_std" type="text_std" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of isa_closure.-->
+    <field name="isa_closure_eng" type="text_eng" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A Keyword version of isa_closure.-->
+    <field name="isa_closure_kw" type="text_kw" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="isa_closure" dest="isa_closure_std"></copyField>
+    <copyField source="isa_closure" dest="isa_closure_eng"></copyField>
+    <copyField source="isa_closure" dest="isa_closure_kw"></copyField>
+    <!-- annotation: Label for all Ancestral terms (is_a) -->
+    <field name="isa_closure_label" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of isa_closure_label.-->
+    <field name="isa_closure_label_std" type="text_std" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of isa_closure_label.-->
+    <field name="isa_closure_label_eng" type="text_eng" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A Keyword version of isa_closure_label.-->
+    <field name="isa_closure_label_kw" type="text_kw" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="isa_closure_label" dest="isa_closure_label_std"></copyField>
+    <copyField source="isa_closure_label" dest="isa_closure_label_eng"></copyField>
+    <copyField source="isa_closure_label" dest="isa_closure_label_kw"></copyField>
+    <!-- Automatically created to capture mapping information -->
+    <!-- between isa_(list|closure) and isa_closure_label.-->
+    <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
+    <field name="isa_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+  </fields>
+  <uniqueKey>id</uniqueKey>
+</schema>

@@ -1,0 +1,80 @@
+####
+#### The ontology description file for Solr facilitating Pheno-Geno Search
+####
+id: annotation
+schema_generating: true
+description: Annotation consisting of a study along with an ontology term that describes its phenotype
+display_name: Annotation
+document_category: annotation
+weight: 40
+boost_weights: ontology_class^3.0 ontology_class_label^5.5 isa_closure^1.0 isa_closure_label^1.0
+result_weights: ontology_class^8.0
+filter_weights: isa_closure_label^1.0 is_obsolete^0.0
+fields:
+  - id: id
+    description: "A unique identifier for the annotation."
+    display_name: Annotation id
+    type: string
+    property: []
+    searchable: true
+
+  - id: study_accession
+    description: "Study Accession"
+    display_name: Study Accession
+    type: string
+    property: []
+    searchable: true
+
+  - id: variable_phv
+    description: "Study Variable"
+    display_name: study variable
+    type: string
+    property: []
+
+  - id: tag_id
+    description: "tag ID"
+    display_name: tag ID
+    type: string
+    property: []
+
+  - id: study_url
+    description: "Study URL"
+    display_name: Study URL
+    type: string
+    property: []
+
+  - id: study_dataset_url
+    description: "Study Dataset URL"
+    display_name: Study Dataset URL
+    type: string
+    property: []
+
+  - id: ontology_class
+    description: "Ontology class"
+    display_name: Ontology class
+    type: string
+    property: []
+    searchable: true
+
+  - id: ontology_class_label
+    description: "Ontology class label"
+    display_name: Ontology class label
+    type: string
+    property: []
+    searchable: true
+
+  - id: isa_closure
+    description: "Ancestral terms (is_a)"
+    display_name: Ancestral terms (is_a)
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
+
+  - id: isa_closure_label
+    description: "Label for all Ancestral terms (is_a)"
+    display_name: Label for all Ancestral terms (is_a)
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true
