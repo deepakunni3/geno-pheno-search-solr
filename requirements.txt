@@ -1,0 +1,2 @@
+ontobio==1.6.3
+pysolr==3.8.1
