@@ -135,4 +135,5 @@ if __name__ == "__main__":
 
 	logging.debug(documents)
 	load(documents)
+	solr.optimize()
 
