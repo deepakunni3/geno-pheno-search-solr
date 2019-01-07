@@ -1,6 +1,7 @@
 from ontobio.ontol_factory import OntologyFactory
 import pysolr, logging, argparse, hashlib
 import networkx as nx
+import pickle
 
 parser = argparse.ArgumentParser(description="Parse and load a list of annotations into a configured Solr core")
 parser.add_argument('--solr_url', type=str, required=True)
@@ -8,6 +9,7 @@ parser.add_argument('--input', type=str, required=True)
 
 logging = logging.getLogger()
 
+PKL = open("/tmp/documents.pkl", "wb")
 
 cache = {}
 term_cache = {}
@@ -134,6 +136,7 @@ if __name__ == "__main__":
             documents.append(document)
 
     logging.debug(documents)
-    load(documents)
-    solr.optimize()
+    #load(documents)
+    #solr.optimize()
+    pickle.dump(documents, PKL)
 
