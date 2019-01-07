@@ -95,7 +95,7 @@ if __name__ == "__main__":
         for line in FH:
             element = line.rstrip().split('\t')
             ontology_id = element[-1]
-            ontology_id = verify_curie[ontology_id]
+            ontology_id = verify_curie(ontology_id)
             isa_closure = None
             isa_closure_label = None
             if ontology_id not in term_cache:
