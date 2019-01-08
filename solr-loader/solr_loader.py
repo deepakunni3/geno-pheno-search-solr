@@ -28,7 +28,7 @@ def ancestors(ont, term, relations, reflexive=False):
     if relations is None:
         g = ont.get_graph()
     else:
-        key = '-'.join(relations)
+        key = ont.handle + '-'.join(relations)
         if key in cache:
             g = cache[key]
         else:
