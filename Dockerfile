@@ -39,6 +39,7 @@ RUN wget http://build.berkeleybop.org/userContent/owltools/owltools -O /usr/bin/
 
 # Clone geno-pheno-search-solr
 RUN git clone https://github.com/deepakunni3/geno-pheno-search-solr.git /opt/solr/geno-pheno-search-solr
+
 RUN pip3 install ontobio==1.6.3
 
 # Download necessary ontologies
@@ -49,7 +50,7 @@ RUN wget http://purl.obolibrary.org/obo/oba.obo -O /opt/solr/geno-pheno-search-s
 RUN wget https://www.ebi.ac.uk/efo/efo.obo -O /opt/solr/geno-pheno-search-solr/efo.obo
 
 # Download the annotations
-RUN wget https://gist.githubusercontent.com/deepakunni3/6e44ebd3da27ef107c8dba539efc0545/raw/433b2a5a0b1fafa276a7a8bff5af758ed7b112aa/topmed_curies_denormalized.tsv -O /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv
+RUN wget https://gist.githubusercontent.com/deepakunni3/6e44ebd3da27ef107c8dba539efc0545/raw/635e3ad4b7b5f8135c07c26a014f4d3a952a4fa6/topmed_curies_denormalized.tsv -O /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv
 
 # Configure Solr
 RUN set -e; \
@@ -60,6 +61,9 @@ RUN set -e; \
   cp /opt/solr/${SOLR_DISTRIBUTION}/server/solr/configsets/basic_configs/conf/elevate.xml /opt/solr/${SOLR_DISTRIBUTION}/server/solr/genophenosearch-core/conf && \
   cp /opt/solr/geno-pheno-search-solr/solr-schema/genophenosearch-schema.xml /opt/solr/${SOLR_DISTRIBUTION}/server/solr/genophenosearch-core/schema.xml
 
+RUN cd /opt/solr/geno-pheno-search-solr && \
+python3 /opt/solr/geno-pheno-search-solr/solr-loader/solr_loader.py --solr_url http://localhost:8983/solr/genophenosearch-core --input /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv
+
 RUN chown -R solr:solr /opt/solr
 
 EXPOSE 8983
@@ -68,5 +72,5 @@ USER solr
 
 ENTRYPOINT /opt/solr/${SOLR_DISTRIBUTION}/bin/solr start && \
 cd /opt/solr/geno-pheno-search-solr && \
-python3 solr-loader/solr_loader.py --solr_url http://localhost:8983/solr/genophenosearch-core --input topmed_curies_denormalized.tsv && \
+python3 solr-loader/load_documents.py --solr_url http://localhost:8983/solr/genophenosearch-core --input /tmp/documents.pkl && \
 /bin/bash
