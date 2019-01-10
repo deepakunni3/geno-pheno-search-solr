@@ -3,7 +3,7 @@ MAINTAINER  Deepak Unni "deepak.unni3@gmail.com"
 
 # Install pre-requisites
 RUN apt-get update && \
-  apt-get -y install vim lsof htop wget python3 python3-pip git-core procps
+  apt-get -y install vim lsof htop wget python3 python3-pip git-core procps nginx
 
 # Set environment variables
 ENV SOLR_USER="solr" \
@@ -52,6 +52,9 @@ RUN wget https://www.ebi.ac.uk/efo/efo.obo -O /opt/solr/geno-pheno-search-solr/e
 # Download the annotations
 RUN wget https://gist.githubusercontent.com/deepakunni3/6e44ebd3da27ef107c8dba539efc0545/raw/635e3ad4b7b5f8135c07c26a014f4d3a952a4fa6/topmed_curies_denormalized.tsv -O /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv
 
+# set up proxy for nginx
+RUN wget https://gist.githubusercontent.com/deepakunni3/7033f90f935d3f98d866d77e643b6e7a/raw/ad64c87771b7c471658b98664b2b16264e6bf157/nginx-proxy.conf -O /etc/nginx/nginx.conf
+
 # Configure Solr
 RUN set -e; \
   mkdir /opt/solr/${SOLR_DISTRIBUTION}/server/solr/genophenosearch-core && \
@@ -66,11 +69,12 @@ python3 /opt/solr/geno-pheno-search-solr/solr-loader/solr_loader.py --solr_url h
 
 RUN chown -R solr:solr /opt/solr
 
-EXPOSE 8983
+EXPOSE 80
 WORKDIR /opt/solr
-USER solr
 
-ENTRYPOINT /opt/solr/${SOLR_DISTRIBUTION}/bin/solr start && \
-cd /opt/solr/geno-pheno-search-solr && \
-python3 solr-loader/load_documents.py --solr_url http://localhost:8983/solr/genophenosearch-core --input /tmp/documents.pkl && \
-/bin/bash
+COPY entrypoint.sh /opt/entrypoint.sh
+RUN chmod +x /opt/entrypoint.sh
+
+ENTRYPOINT ["/opt/entrypoint.sh"]
+
+CMD ["/bin/bash"]
