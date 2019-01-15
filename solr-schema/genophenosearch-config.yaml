@@ -78,3 +78,11 @@ fields:
     cardinality: multi
     property: []
     searchable: true
+
+  - id: other_annotations
+    description: "Other annotations"
+    display_name: Other annotations
+    type: string
+    cardinality: multi
+    property: []
+    searchable: true

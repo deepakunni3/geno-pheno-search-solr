@@ -133,6 +133,17 @@
     <!-- between isa_(list|closure) and isa_closure_label.-->
     <!-- It is not indexed for searching (JSON blob), but may be useful to the client. -->
     <field name="isa_closure_map" type="string" required="false" multiValued="false" indexed="false" stored="true"></field>
+    <!-- annotation: Other annotations -->
+    <field name="other_annotations" type="string" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of other_annotations.-->
+    <field name="other_annotations_std" type="text_std" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of other_annotations.-->
+    <field name="other_annotations_eng" type="text_eng" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <!--A Keyword version of other_annotations.-->
+    <field name="other_annotations_kw" type="text_kw" required="false" multiValued="true" indexed="true" stored="true"></field>
+    <copyField source="other_annotations" dest="other_annotations_std"></copyField>
+    <copyField source="other_annotations" dest="other_annotations_eng"></copyField>
+    <copyField source="other_annotations" dest="other_annotations_kw"></copyField>
   </fields>
   <uniqueKey>id</uniqueKey>
 </schema>

@@ -95,9 +95,17 @@ if __name__ == "__main__":
 
     with open(args.input, 'r') as FH:
         for line in FH:
-            element = line.rstrip().split('\t')
-            ontology_id = element[-1]
+            element = line.split('\t')
+            if len(element) != 7:
+                log.error("Improperly formatted line: {}".format(line))
+                exit()
+            ontology_id = element[-2]
             ontology_id = verify_curie(ontology_id)
+
+            other_annotations = element[-1].rstrip().split(',')
+            if len(other_annotations) > 0:
+                other_annotations = [verify_curie(x) for x in other_annotations]
+
             isa_closure = None
             isa_closure_label = None
             if ontology_id not in term_cache:
@@ -131,7 +139,8 @@ if __name__ == "__main__":
                 'ontology_class': ontology_id,
                 'ontology_class_label': ontology.label(ontology_id),
                 'isa_closure': isa_closure,
-                'isa_closure_label': isa_closure_label
+                'isa_closure_label': isa_closure_label,
+                'other_annotations': other_annotations
             }
             documents.append(document)
 
