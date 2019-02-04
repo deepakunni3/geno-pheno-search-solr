@@ -96,8 +96,8 @@ if __name__ == "__main__":
     with open(args.input, 'r') as FH:
         for line in FH:
             element = line.split('\t')
-            if len(element) != 7:
-                log.error("Improperly formatted line: {}".format(line))
+            if len(element) != 8:
+                logging.error("Improperly formatted line: {}".format(line))
                 exit()
             ontology_id = element[-2]
             ontology_id = verify_curie(ontology_id)
@@ -132,10 +132,11 @@ if __name__ == "__main__":
                 'id': hashlib.sha256(line.encode()).hexdigest(),
                 'document_category': DOCUMENT_CATEGORY,
                 'study_accession': element[2],
+                'study_dataset_accession': element[4],
                 'variable_phv': element[0],
                 'tag_id': element[1],
                 'study_url': element[3],
-                'study_dataset_url': element[4],
+                'study_dataset_url': element[5],
                 'ontology_class': ontology_id,
                 'ontology_class_label': ontology.label(ontology_id),
                 'isa_closure': isa_closure,

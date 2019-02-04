@@ -25,6 +25,13 @@ fields:
     property: []
     searchable: true
 
+  - id: study_dataset_accession
+    description: "Study Dataset Accession"
+    display_name: Study Dataset Accession
+    type: string
+    property: []
+    searchable: true
+
   - id: variable_phv
     description: "Study Variable"
     display_name: study variable
