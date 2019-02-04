@@ -50,7 +50,7 @@ RUN wget http://purl.obolibrary.org/obo/oba.obo -O /opt/solr/geno-pheno-search-s
 RUN wget https://www.ebi.ac.uk/efo/efo.obo -O /opt/solr/geno-pheno-search-solr/efo.obo
 
 # Download the annotations
-RUN wget https://gist.githubusercontent.com/deepakunni3/6e44ebd3da27ef107c8dba539efc0545/raw/208c8090d18a0ba5c4b999aab6d3ad226a97ae5e/topmed_curies_denormalized.tsv -O /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv
+RUN wget https://gist.githubusercontent.com/deepakunni3/6e44ebd3da27ef107c8dba539efc0545/raw/e6bb53f68ffa75482de1336dbc96aabea6ea3f53/topmed_curies_denormalized.tsv -O /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv
 
 # set up proxy for nginx
 RUN wget https://gist.githubusercontent.com/deepakunni3/7033f90f935d3f98d866d77e643b6e7a/raw/ad64c87771b7c471658b98664b2b16264e6bf157/nginx-proxy.conf -O /etc/nginx/nginx.conf
