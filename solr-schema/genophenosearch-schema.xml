@@ -77,6 +77,17 @@
     <copyField source="study_accession" dest="study_accession_std"></copyField>
     <copyField source="study_accession" dest="study_accession_eng"></copyField>
     <copyField source="study_accession" dest="study_accession_kw"></copyField>
+    <!-- annotation: Study Dataset Accession -->
+    <field name="study_dataset_accession" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A StandardTokenized version of study_dataset_accession.-->
+    <field name="study_dataset_accession_std" type="text_std" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A EdgeNGram version of study_dataset_accession.-->
+    <field name="study_dataset_accession_eng" type="text_eng" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <!--A Keyword version of study_dataset_accession.-->
+    <field name="study_dataset_accession_kw" type="text_kw" required="false" multiValued="false" indexed="true" stored="true"></field>
+    <copyField source="study_dataset_accession" dest="study_dataset_accession_std"></copyField>
+    <copyField source="study_dataset_accession" dest="study_dataset_accession_eng"></copyField>
+    <copyField source="study_dataset_accession" dest="study_dataset_accession_kw"></copyField>
     <!-- annotation: Study Variable -->
     <field name="variable_phv" type="string" required="false" multiValued="false" indexed="true" stored="true"></field>
     <!-- annotation: tag ID -->
