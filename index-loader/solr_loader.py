@@ -5,7 +5,7 @@ parser = argparse.ArgumentParser(description="Parse and load a list of annotatio
 parser.add_argument('--url', help='Solr URL (Ex: http://localhost:8983/solr/core1)',type=str, required=False)
 parser.add_argument('--input', help='Input TSV (Ex: topmed_curies.tsv)', type=str, required=True)
 parser.add_argument('--output', help='Output JSON (Ex: documents.json)', type=str, required=True)
-parser.add_argument('--use_existing', help='Use pre-built documents to load into Solr', type=bool, default=False, required=False)
+parser.add_argument('--use_existing', help='Use pre-built documents to load into Solr', action='store_true', required=False)
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
