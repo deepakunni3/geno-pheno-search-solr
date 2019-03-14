@@ -65,7 +65,7 @@ RUN set -e; \
   cp /opt/solr/geno-pheno-search-solr/solr-schema/genophenosearch-schema.xml /opt/solr/${SOLR_DISTRIBUTION}/server/solr/genophenosearch-core/schema.xml
 
 RUN cd /opt/solr/geno-pheno-search-solr && \
-python3 /opt/solr/geno-pheno-search-solr/solr-loader/solr_loader.py --solr_url http://localhost:8983/solr/genophenosearch-core --input /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv
+python3 /opt/solr/geno-pheno-search-solr/index-loader/solr_loader.py --input /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv --output /opt/solr/geno-pheno-search-solr/documents.json
 
 RUN chown -R solr:solr /opt/solr
 
