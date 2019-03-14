@@ -1,19 +1,20 @@
 from ontobio.ontol_factory import OntologyFactory
-import pysolr, logging, argparse, hashlib
 import networkx as nx
-import pickle
+import logging, hashlib
 
-parser = argparse.ArgumentParser(description="Parse and load a list of annotations into a configured Solr core")
-parser.add_argument('--solr_url', type=str, required=True)
-parser.add_argument('--input', type=str, required=True)
+DOCUMENT_CATEGORY = "annotation"
+SUBCLASS_OF = 'subClassOf'
 
-logging = logging.getLogger()
-
-PKL = open("/tmp/documents.pkl", "wb")
+prefix_to_file_map = {
+    'OBA': 'oba.obo',
+    'NCIT': 'ncit.obo',
+    'HP': 'hp.obo',
+    'MONDO': 'mondo.obo',
+    'EFO': 'efo.obo'
+}
 
 cache = {}
-term_cache = {}
-
+log = logging.getLogger()
 def ancestors(ont, term, relations, reflexive=False):
     """
     Get all ancestors for a given term
@@ -61,10 +62,10 @@ def verify_curie(curie):
     curie_list = curie.split(':')
     if len(curie_list) != 2:
         if "_" in curie:
-            logging.warning("{} should actually be {}".format(curie,curie.replace('_', ':')))
+            log.warning("{} should actually be {}".format(curie,curie.replace('_', ':')))
             curie_list = curie.split('_')
         else:
-            logging.error("{} is not a proper CURIE")
+            log.error("{} is not a proper CURIE".format(curie))
     return ':'.join(curie_list)
 
 def get_prefix(curie):
@@ -73,31 +74,19 @@ def get_prefix(curie):
     """
     return curie.split(':')[0]
 
+def parse(input_file):
+    """
+    Parse an input TSV into JSON documents
+    """
+    ontologies = {}
+    term_cache = {}
+    documents = []
 
-solr = None
-DOCUMENT_CATEGORY = "annotation"
-SUBCLASS_OF = 'subClassOf'
-
-prefix_to_file_map = {
-    'OBA': 'oba.obo',
-    'NCIT': 'ncit.obo',
-    'HP': 'hp.obo',
-    'MONDO': 'mondo.obo',
-    'EFO': 'efo.obo'
-}
-
-ontologies = {}
-documents = []
-
-if __name__ == "__main__":
-    args = parser.parse_args()
-    solr = pysolr.Solr(url = args.solr_url)
-
-    with open(args.input, 'r') as FH:
+    with open(input_file, 'r') as FH:
         for line in FH:
             element = line.split('\t')
             if len(element) != 8:
-                logging.error("Improperly formatted line: {}".format(line))
+                log.error("Improperly formatted line: {}".format(line))
                 exit()
             ontology_id = element[-2]
             ontology_id = verify_curie(ontology_id)
@@ -115,7 +104,7 @@ if __name__ == "__main__":
                     ontology = ontologies[prefix]
                 else:
                     ontology_factory = OntologyFactory()
-                    logging.info("loading ontology: {}".format(prefix))
+                    log.info("loading ontology: {}".format(prefix))
                     ontology = ontology_factory.create(prefix_to_file_map[prefix])
                     ontologies[prefix] = ontology
 
@@ -145,8 +134,4 @@ if __name__ == "__main__":
             }
             documents.append(document)
 
-    logging.debug(documents)
-    #load(documents)
-    #solr.optimize()
-    pickle.dump(documents, PKL)
-
+    return documents
