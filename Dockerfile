@@ -47,7 +47,6 @@ RUN wget http://purl.obolibrary.org/obo/hp.obo -O /opt/solr/geno-pheno-search-so
 RUN wget http://purl.obolibrary.org/obo/mondo.obo -O /opt/solr/geno-pheno-search-solr/mondo.obo
 RUN wget http://purl.obolibrary.org/obo/ncit.obo -O /opt/solr/geno-pheno-search-solr/ncit.obo
 RUN wget http://purl.obolibrary.org/obo/oba.obo -O /opt/solr/geno-pheno-search-solr/oba.obo
-RUN wget https://www.ebi.ac.uk/efo/efo.obo -O /opt/solr/geno-pheno-search-solr/efo.obo
 
 # Download the annotations
 RUN wget https://gist.githubusercontent.com/deepakunni3/6e44ebd3da27ef107c8dba539efc0545/raw/6af7fc64cfba1ef5c9557ccf6f334108fd734e85/topmed_curies_denormalized.tsv -O /opt/solr/geno-pheno-search-solr/topmed_curies_denormalized.tsv

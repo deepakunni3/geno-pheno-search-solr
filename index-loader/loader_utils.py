@@ -10,7 +10,7 @@ prefix_to_file_map = {
     'NCIT': 'ncit.obo',
     'HP': 'hp.obo',
     'MONDO': 'mondo.obo',
-    'EFO': 'efo.obo'
+    'EFO': 'efo'
 }
 
 cache = {}
