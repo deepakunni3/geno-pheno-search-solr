@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     if args.url:
         solr = pysolr.Solr(url = args.url)
-        logging.info("Adding documents to Solr: {}".format(args.solr_url))
+        logging.info("Adding documents to Solr: {}".format(args.url))
         solr.add(documents)
         logging.info("Optimizing Solr core")
         solr.optimize()
